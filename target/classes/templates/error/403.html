@@ -1,0 +1,31 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>error</title>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>error</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">error</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="container">
+
+			<div class="starter-template">
+				<img src="images/403-access.png" class="img-fluid" alt="access denied">
+				<div th:inline="text">
+					<h5>Hello <strong>'[[${#httpServletRequest.remoteUser}]]'</strong>, you
+					do not have permission to access this page.</h5>
+				</div>
+			</div>
+
+		</div>
+		<!-- /.container -->
+	</div>
+</body>
+</html>

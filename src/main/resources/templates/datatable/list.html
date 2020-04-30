@@ -1,0 +1,65 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Clients</title>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var table = $('#employeesTable').DataTable();
+	});
+</script>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>Clients</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">Clients</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Lists</h3>
+				<div class="box-tools pull-right">
+					<a href="/datatable/add" type="button" class="btn btn-warning"><i
+						class="fa fa-plus"></i></a> <br clear="all" />
+				</div>
+			</div>
+			<br />
+			<div class="table-responsive box-body no-padding">
+				<table id="employeesTable"
+					class="table table-striped table-hover table-condensed">
+					<thead>
+						<tr>
+							<th width="5%">ID</th>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Phone</th>
+							<th>Registration Date</th>
+							<th width="10%" class="dt-center">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="row : ${list}">
+							<td th:text="${row.id}"></td>
+							<td th:text="${row.name + ' ' + row.lastName}"></td>
+							<td th:text="${row.email}"></td>
+							<td th:text="${row.phone}"></td>
+							<td th:text="${row.createdAt}"></td>
+							<td><a class="btn btn-success btn-sm edit"
+								th:href="${'/datatable/edit/' + row.id}"><i
+									class="glyphicon glyphicon-pencil" aria-hidden="true"></i>edit</a>
+								- <a class="btn btn-danger btn-sm delete"
+								th:href="${'/datatable/delete/' + row.id}"><i
+									class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+									delete</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

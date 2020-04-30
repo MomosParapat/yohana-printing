@@ -1,0 +1,3 @@
+INSERT INTO yohana_printing.customers(first_name, last_name, email, phone_number, address,created_at,updated_at,created_by,updated_by) values ('Gustavo','Ponce','test@test.com','1234567890','Bekasi',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'Script','Script');
+INSERT INTO yohana_printing.customers(first_name, last_name, email, phone_number, address,created_at,updated_at,created_by,updated_by) values ('Bob','Marley','one@love.com','6483748590','Jakarta',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'Script','Script');
+INSERT INTO yohana_printing.customers(first_name, last_name, email, phone_number, address,created_at,updated_at,created_by,updated_by) values ('David','Gilmour','high@hopes.com','7648909831','Tarutung',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'Script','Script');

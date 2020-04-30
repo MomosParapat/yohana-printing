@@ -1,0 +1,103 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Searching</title>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#search_input").blur(function(event) {
+			event.preventDefault();
+			$.ajax({
+			     type: "GET",
+			     url: "/searching/search",
+			     data: { term: $(this).val() },			     
+					success : function(data) {
+						var json = "<h4>Ajax Response</h4><pre>"
+								+ JSON.stringify(data, null, 4) + "</pre>";
+						$('#feedback').html(json);
+						console.log("SUCCESS : ", data);
+						$("#btn-search").prop("disabled", false);
+
+					},
+					error : function(e) {
+						var json = "<h4>Ajax Response</h4><pre>" + e.responseText
+								+ "</pre>";
+						$('#feedback').html(json);
+						console.log("ERROR : ", e);
+						$("#btn-search").prop("disabled", false);
+					}			     
+			})
+			//fire_ajax_submit();
+		})
+	});
+
+	function fire_ajax_submit() {
+
+		var search = {
+			term : $("#search_input").val()
+		}
+		//search["username"] = $("#search_input").val();
+		// search["email"] = $("#email").val();
+
+		//$("#btn-search").prop("disabled", true);
+
+		$.ajax({
+			type : "GET",
+			contentType : "application/json",
+			url : "/searching/search",
+			data : JSON.stringify(search),
+			dataType : 'json',
+			cache : false,
+			timeout : 600000,
+			success : function(data) {
+
+				var json = "<h4>Ajax Response</h4><pre>"
+						+ JSON.stringify(data, null, 4) + "</pre>";
+				$('#feedback').html(json);
+
+				console.log("SUCCESS : ", data);
+				$("#btn-search").prop("disabled", false);
+
+			},
+			error : function(e) {
+
+				var json = "<h4>Ajax Response</h4><pre>" + e.responseText
+						+ "</pre>";
+				$('#feedback').html(json);
+
+				console.log("ERROR : ", e);
+				$("#btn-search").prop("disabled", false);
+
+			}
+		});
+
+	}
+</script>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>Searching</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">Registration Client</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Form</h3>
+				<div class="box-tools pull-right">
+					<a href="/customers" type="button" class="btn btn-box-tool"><i
+						class="fa fa-list-ul"></i></a>
+				</div>
+			</div>
+			<div id="feedback"></div>
+			<form>
+				<label for="search_input">Search:</label> <input type="text"
+					id="search_input">
+			</form>
+		</div>
+	</div>
+</body>
+</html>

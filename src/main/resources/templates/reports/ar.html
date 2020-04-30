@@ -1,0 +1,76 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>Payments</title>
+<!-- <script type="text/javascript">
+	$(document).ready(function() {
+		var table = $('#employeesTable').DataTable();
+	});
+</script> -->
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>Payments</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">Account Receivable</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Report</h3>
+			</div>
+			<div class="box-body">
+				<div class="table-responsive box-body no-padding">
+					<table id="employeesTable"
+						class="table table-bordered table-hover table-striped">
+						<thead>
+							<tr>
+								<th width="10%">Number</th>
+								<th>Customer</th>
+								<th width="15%">Due Date</th>
+								<th width="15%">Due Balance</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="row : ${arlist}">
+								<td th:text="${row.orderNumber}"></td>
+								<td
+									th:text="${row.customer.firstName+' '+row.customer.lastName}"></td>
+								<td class="text-center"
+									th:text="${row.completedYear+'-'+row.completedMonth+'-'+row.completedDate}"></td>
+								<td class="text-right"
+									th:text="${#numbers.formatDecimal(row.totalOutstanding, 0, 'COMMA', 2, 'POINT')}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-8"></div>
+					<div class="col-md-4">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label" for="grandTotal">Grand
+								Total</label>
+							<div class="col-sm-9">
+
+								<span class="form-control text-right"
+									th:text="${#numbers.formatDecimal(grandTotal, 0, 'COMMA', 2, 'POINT')}"
+									id="grandTotal"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</body>
+</html>

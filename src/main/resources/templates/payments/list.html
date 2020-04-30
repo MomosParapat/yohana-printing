@@ -1,0 +1,83 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>[[${title}]]</title>
+<script type="text/javascript" src="/js/payment-list.js"></script>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>Payments</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">[[${title}]]</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Lists</h3>
+				<div class="box-tools pull-right">
+					<a href="/payments/add" type="button" class="btn btn-warning"><i
+						class="fa fa-plus"></i></a> <br clear="all" />
+				</div>
+			</div>
+			<br />
+			<div class="table-responsive box-body no-padding">
+				<table id="employeesTable"
+					class="table table-bordered table-hover stripe dataTable">
+					<thead>
+						<tr>
+							<th width="1%">Print</th>
+							<th width="5%">#</th>
+							<th width="8%">Number</th>
+							<th width="8%">Invoice</th>
+							<th>Customer</th>
+							<th width="5%">Status</th>
+							<th class="text-right" width="10%">Amount</th>
+							<th width="5%">Type</th>
+							<th width="10%">Created At</th>
+							<th width="10%">Created By</th>
+							<th width="15%" class="dt-center">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							th:classappend="( ${row.status=='PROCESSED'} ? 'text-success' : ( ${row.status=='VOIDED'} ? 'text-danger text-del' : 'text-body' ) )"
+							th:each="row : ${list}">
+							<td class="text-center"><a class="btn btn-warning"
+								th:href="${'/payments/receipt.html/' + row.id}"><i
+									class="fa fa-print"></i></a></td>
+							<td th:text="${row.id}"></td>
+							<td th:text="${row.paymentNumber}"></td>
+							<td th:text="${row.invoice.order.orderNumber}"></td>
+							<td
+								th:text="${row.invoice.order.customer.firstName+' '+row.invoice.order.customer.lastName}"></td>
+							<td th:text="${row.status}"></td>
+							<td class="text-right"
+								th:text="${#numbers.formatDecimal(row.paymentAmount, 0, 'COMMA', 2, 'POINT')}"></td>
+							<td
+								th:text="(${row.paymentMethod==1} ? 'CASH' : ( ${row.paymentMethod==2} ? 'BANK' : 'OTHERS' ) )"></td>
+							<td
+								th:text="${#temporals.format(row.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+							<td th:text="${row.createdBy}"></td>
+							<td>
+								<div class="text-center"
+									th:if="${row.status!='PROCESSED' && row.status!='VOIDED'}">
+									<a class="btn btn-success btn-sm success"
+										th:onclick="'process_data('+${row.id}+')'"><strong
+										class="text-light">Distribute</strong></a> - <a
+										class="btn btn-danger btn-sm delete"
+										th:onclick="'void_data('+${row.id}+')'"><strong
+										class="text-light">Void</strong></a>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

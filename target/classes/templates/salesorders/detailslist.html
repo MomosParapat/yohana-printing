@@ -1,0 +1,67 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>[[${title}]]</title>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var table = $('#employeesTable').DataTable();
+	});
+</script>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>Price</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li><a href="/items"><i class="fa fa-dashboard"></i> Items</a></li>
+			<li class="active">Price Lists</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title" th:text="${itemId}">Lists</h3>
+				<div class="box-tools pull-right">
+					<a th:href="${'/items/pricelist/add/'+itemId}" type="button"
+						class="btn btn-warning"><i class="fa fa-plus"></i></a> <br
+						clear="all" />
+				</div>
+			</div>
+			<br />
+			<div class="table-responsive box-body no-padding">
+				<table id="employeesTable"
+					class="table table-striped table-hover table-condensed">
+					<thead>
+						<tr>
+							<th width="5%">ID</th>
+							<th>Item</th>
+							<th>Qty From</th>
+							<th>Qty To</th>
+							<th>Price Date</th>
+							<th width="10%" class="dt-center">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="row : ${list}">
+							<td th:text="${row.id}"></td>
+							<td th:text="${row.itemId}"></td>
+							<td th:text="${row.qtyFrom}"></td>
+							<td th:text="${row.qtyTo}"></td>
+							<td th:text="${row.price}"></td>
+							<td><a class="btn btn-success btn-sm edit"
+								th:href="${'/items/pricelist/edit/' + row.id}"><i
+									class="glyphicon glyphicon-pencil" aria-hidden="true"></i>edit</a>
+								- <a class="btn btn-danger btn-sm delete"
+								th:href="${'/items/pricelist/delete/' + row.id}"><i
+									class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+									delete</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

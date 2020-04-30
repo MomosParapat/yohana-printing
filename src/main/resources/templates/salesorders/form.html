@@ -1,0 +1,178 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>[[${title}]]</title>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var table = $('#detailsTable').DataTable();
+	});
+</script>
+
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>[[${title}]]</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li><a href="/salesorders">[[${title}]]</a></li>
+			<li class="active">Sales Order Form</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Form</h3>
+				<div class="box-tools pull-right">
+					<a href="/salesorders" type="button" class="btn btn-warning"><i
+						class="fa fa-list-ul"></i></a>
+				</div>
+			</div>
+			<form data-toggle="validator" role="form" th:object="${salesOrderPayload}" th:action="@{/salesorders/save}" method="post">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<input type="hidden" th:field="*{id}" /> <input type="hidden"
+								th:field="*{status}" />
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="orderNumber">No</label>
+								<div class="col-sm-9">
+									<input type="text" readonly="readonly" required class="form-control"
+										th:field="*{orderNumber}" id="orderNumber" />
+									<div class="text-danger"
+										th:if="${#fields.hasErrors('orderNumber')}"
+										th:errors="*{orderNumber}"></div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="orderNumber">Customer</label>
+								<div class="col-sm-9">
+									<select required th:field="*{customerId}"
+										class="form-control mr-1" style="width: 100%">
+										<option value="">Customer</option>
+										<option th:each="n : ${customers}" th:value="${n.id}"
+											th:text="${n.firstName+' '+n.lastName}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="customerName">Completed
+									Date</label>
+								<div class="col-sm-3">
+									<select required class="form-control mr-1" style="width: 100%"
+										th:field="*{completedDate}">
+										<option value="">Tanggal</option>
+										<option th:each="n : ${datemodel.dt}" th:value="${n}"
+											th:text="${n}"></option>
+									</select>
+								</div>
+								<div class="col-sm-3">
+									<select required class="form-control mr-1" style="width: 100%"
+										th:field="*{completedMonth}">
+										<option value="">Bulan</option>
+										<option th:each="n : ${datemodel.month}" th:value="${n.value}"
+											th:text="${n.name}"></option>
+									</select>
+								</div>
+								<div class="col-sm-3">
+									<select required class="form-control mr-1" style="width: 100%"
+										th:field="*{completedYear}">
+										<option value="">Tahun</option>
+										<option th:each="n : ${datemodel.year}" th:value="${n}"
+											th:text="${n}"></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="subTotal">Sub
+									Total</label>
+								<div class="col-sm-8">
+									<span
+										th:text="${#numbers.formatDecimal(salesOrderPayload.subTotal, 0, 'COMMA', 2, 'POINT')}"
+										id="subTotal"></span> <input type="hidden"
+										th:field="*{subTotal}" />
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="discount">Discount
+									(Rp)</label>
+								<div class="col-sm-6">
+									<input type="number" required class="form-control"
+										th:field="*{discount}" id="discount" />
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="paymentNet">Total
+									Charged</label>
+								<div class="col-sm-8">
+									<span
+										th:text="${#numbers.formatDecimal(salesOrderPayload.paymentNet, 0, 'COMMA', 2, 'POINT')}"></span>
+									<input type="hidden" th:field="*{paymentNet}" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="box-footer">
+						<button type="submit" class="btn btn-primary ">Save</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title" th:text="${itemId}">Lists</h3>
+				<div class="box-tools pull-right">
+					<a th:if="${orderId!=null}"
+						th:href="${'/salesorders/details/add/'+orderId}" type="button"
+						class="btn btn-warning"><i class="fa fa-plus"></i></a> <br
+						clear="all" />
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="table-responsive box-body no-padding">
+					<table id="detailsTable"
+						class="table table-bordered table-hover dataTable">
+						<thead>
+							<tr>
+								<th>Item</th>
+								<th width="10%" class="text-right">Qty</th>
+								<th width="10%" class="text-right">Disc</th>
+								<th width="10%" class="text-right">Price</th>
+								<th width="10%" class="text-right">Length</th>
+								<th width="10%" class="text-right">Width</th>
+								<th width="10%" class="text-right">Type</th>
+								<th width="10%" class="text-right">Sub Total</th>
+								<th width="15%" class="text-center">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="row : ${details}">
+								<td th:text="${row.items.code+' '+row.items.name}"></td>
+								<td class="text-right" th:text="${row.qty}"></td>
+								<td class="text-right" th:text="${row.lineDisc}"></td>
+								<td class="text-right"
+									th:text="${#numbers.formatDecimal(row.price, 0, 'COMMA', 2, 'POINT')}"></td>
+								<td class="text-right" th:text="${row.length}"></td>
+								<td class="text-right" th:text="${row.width}"></td>
+								<td class="text-right" th:text="${row.type}"></td>
+								<td class="text-right"
+									th:text="${#numbers.formatDecimal(row.lineTotal, 0, 'COMMA', 2, 'POINT')}"></td>
+								<td class="text-center"><a
+									class="btn btn-success btn-sm edit"
+									th:href="${'/salesorders/details/edit/' + row.id}"><i
+										class="fa fa-edit" aria-hidden="true"></i></a> - <a
+									class="btn btn-danger btn-sm delete"
+									th:href="${'salesorders/details/delete/' + row.id}"><i
+										class="fa fa-trash" aria-hidden="true"></i> </a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>[[${title}]]</title>
+<script type="text/javascript" src="/js/salesorder-list.js"></script>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>[[${title}]]</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">[[${title}]]</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">List</h3>
+				<div class="box-tools pull-right">
+					<a href="/salesorders/add" type="button" class="btn btn-warning"><i
+						class="fa fa-plus"></i></a> <br clear="all" />
+				</div>
+			</div>
+			<br />
+			<div class="table-responsive box-body no-padding">
+				<table id="employeesTable"
+					class="table table-bordered table-hover stripe dataTable">
+					<thead>
+						<tr>
+							<th width="1%">Payment</th>
+							<th width="5%">Number</th>
+							<th>Customer</th>
+							<th width="10%">Completed Date</th>
+							<th width="5%">Discount</th>
+							<th width="10%">Total Charged</th>
+							<th width="5%">Status</th>
+							<th width="10%">Created By</th>
+							<th width="10%">Created At</th>
+							<th width="10%">Updated By</th>
+							<th width="10%">Updated At</th>
+							<th width="10%">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							th:classappend="( ${row.status=='ISSUED'} ? 'text-success' : ( ${row.status=='DELETED'} ? 'text-danger text-del' : 'text-body' ) )"
+							th:each="row : ${list}">
+							<td class="text-center"><a class="btn btn-warning"
+										th:href="${'/payments/sales/' + row.id}"><i
+										class="fa fa-money"></i></a></td>
+							<td th:text="${row.orderNumber}"></td>
+							<td th:text="${row.customer.firstName+' '+row.customer.lastName}"></td>
+							<td class="text-center" th:text="${#temporals.format(row.completedDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+							<td class="text-right"
+								th:text="${#numbers.formatDecimal(row.discount, 0, 'COMMA', 2, 'POINT')}"></td>
+							<td class="text-right"
+								th:text="${#numbers.formatDecimal(row.paymentNet, 0, 'COMMA', 2, 'POINT')}"></td>
+							<td th:text="${row.status}"></td>
+							<td th:text="${row.createdBy}"></td>
+							<td th:text="${#temporals.format(row.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+							<td th:text="${row.updatedBy}"></td>
+							<td th:text="${#temporals.format(row.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+							<td><div class="text-center"
+									th:if="${row.status!='ISSUED' && row.status!='DELETED'}">
+									<a class="btn btn-success btn-sm edit"
+										th:href="${'/salesorders/edit/' + row.id}"><i
+										class="fa fa-edit" aria-hidden="true"></i></a>
+									- <a class="btn btn-danger btn-sm delete"
+										th:onclick="'delete_data('+${row.id}+')'"><i
+										class="fa fa-trash" aria-hidden="true"></i>
+										</a>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

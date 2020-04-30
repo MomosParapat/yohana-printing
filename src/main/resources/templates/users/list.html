@@ -1,0 +1,56 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>[[${title}]]</title>
+<script type="text/javascript" src="/js/users-list.js"></script>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>[[${title}]]</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">[[${title}]]</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Lists</h3>
+				<div class="box-tools pull-right">
+					<a href="/users/add" type="button" class="btn btn-warning"><i
+						class="fa fa-plus"></i></a> <br clear="all" />
+				</div>
+			</div>
+			<div class="box-body no-padding">
+				<table id="employeesTable"
+					class="table table-bordered table-hover stripe dataTable">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Name</th>
+							<th>Password</th>
+							<th>Enabled</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="row : ${list}">
+							<td th:text="${row.id}"></td>
+							<td th:text="${row.username}"></td>
+							<td th:text="${row.password}"></td>
+							<td th:text="${row.enabled}"></td>
+							<td><div class="text-center">
+									<a th:class="${row.enabled?'btn btn-danger btn-sm':'btn btn-success btn-sm'}"
+										th:href="${'/users/edit/' + row.id}"
+										th:text="${row.enabled?'Disable':'Enable'}"></a>
+								</div></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

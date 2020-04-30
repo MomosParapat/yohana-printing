@@ -1,0 +1,50 @@
+<!-- sidebar: style can be found in sidebar.less -->
+<section class="sidebar">
+	<!-- sidebar menu: : style can be found in sidebar.less -->
+	<ul class="sidebar-menu">
+		<li class="active treeview"><a href="#"> <i
+				class="fa fa-dashboard"></i> <span>Dashboard</span>
+		</a></li>
+		<li sec:authorize="isAuthenticated()" class="treeview"><a
+			href="#"> <i class="fa fa-folder"></i> <span>Registration</span>
+				<i class="fa fa-angle-left pull-right"></i>
+		</a>
+			<ul class="treeview-menu">
+				<li><a href="/customers"><i class="fa fa-circle-o"></i>
+						[[${T(com.morissoft.printing.constant.Paths).CUSTOMERS}]]</a></li>
+				<li><a href="/items"><i class="fa fa-circle-o"></i>
+						[[${T(com.morissoft.printing.constant.Paths).ITEMS}]]</a></li>
+				<li><a href="/salesorders"><i class="fa fa-circle-o"></i>
+						[[${T(com.morissoft.printing.constant.Paths).SALES_ORDERS}]]</a></li>
+				<li><a href="/invoices"><i class="fa fa-circle-o"></i>[[${T(com.morissoft.printing.constant.Paths).ACCOUNT_RECEIVABLES}]]</a></li>
+				<li><a href="/payments"><i class="fa fa-circle-o"></i>
+						[[${T(com.morissoft.printing.constant.Paths).PAYMENTS}]]</a></li>
+			</ul></li>
+
+		<li class="treeview"><a href="#"> <i class="fa fa-folder"></i>
+				<span>Reports</span> <i class="fa fa-angle-left pull-right"></i>
+		</a>
+			<ul class="treeview-menu">
+				<li><a href="/reports/payments"><i class="fa fa-circle-o"></i>
+						[[${T(com.morissoft.printing.constant.Paths).PAYMENTS}]]</a></li>
+			</ul></li>
+		<li class="treeview"><a href="#"> <i class="fa fa-folder"></i>
+				<span>Examples</span> <i class="fa fa-angle-left pull-right"></i>
+		</a>
+			<ul class="treeview-menu">
+				<li><a href="/example"><i class="fa fa-circle-o"></i>
+						Example</a></li>
+				<li><a href="/datatable"><i class="fa fa-circle-o"></i>
+						DataTables</a></li>
+				<li><a href="/employees"><i class="fa fa-circle-o"></i>
+						Employees</a></li>
+				<li><a href="/validating"><i class="fa fa-circle-o"></i>
+						Validating</a></li>
+				<li><a href="/autocomplete"><i class="fa fa-circle-o"></i>
+						AutoComplete</a></li>
+				<li><a href="/searching"><i class="fa fa-circle-o"></i>
+						Searching</a></li>
+			</ul></li>
+	</ul>
+</section>
+<!-- /.sidebar -->

@@ -1,0 +1,56 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>[[${title}]]</title>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>Items</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li><a href="/items">[[${title}]]</a></li>
+			<li class="active">Item Form</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3>Form</h3>
+				<div class="box-tools pull-right">
+					<a href="/items" type="button" class="btn btn-warning"><i
+						class="fa fa-list-ul"></i></a>
+				</div>
+			</div>
+			<form data-toggle="validator" role="form" th:object="${item}"
+				th:action="@{/items/save}" method="post">
+				<div class="box-body">
+					<input type="hidden" th:field="*{id}" />
+					<div class="form-group">
+						<label for="categories">Category</label> <select
+							class="form-control mr-1" style="width: 100%"
+							th:field="*{categories.id}">
+							<option th:each="n : ${category}" th:value="${n.id}"
+								th:text="${n.name}"></option>
+						</select>
+
+					</div>
+					<div class="form-group">
+						<label for="code">Code</label> <input
+							th:readonly="${formType== '2'}" type="text" required="true"
+							class="form-control" th:field="*{code}" id="code" />
+					</div>
+					<div class="form-group">
+						<label for="name">Name</label> <input type="text" required="true"
+							class="form-control" th:field="*{name}" id="name" />
+					</div>
+				</div>
+				<div class="box-footer">
+					<button type="submit" class="btn btn-primary">Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

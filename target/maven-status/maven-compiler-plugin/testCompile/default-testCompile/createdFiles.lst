@@ -1,0 +1,7 @@
+com/morissoft/printing/YohanaPrintingApplicationTests.class
+com/morissoft/printing/test.class
+com/morissoft/printing/repository/CustomerJpaTest.class
+com/morissoft/printing/repository/ItemsJpaTest.class
+com/morissoft/printing/services/ItemServiceTest.class
+com/morissoft/printing/TestAuditingConfiguration.class
+com/morissoft/printing/repository/SalesOrderJpaTest.class

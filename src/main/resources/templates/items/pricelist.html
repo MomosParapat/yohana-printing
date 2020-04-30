@@ -1,0 +1,105 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>[[${title}]]</title>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var table = $('#employeesTable').DataTable();
+	});
+</script>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>Price</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li><a href="/items"> [[${title}]]</a></li>
+			<li class="active">Price Lists</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Form</h3>
+				<div class="box-tools pull-right">
+					<a href="/items" type="button" class="btn btn-warning"><i
+						class="fa fa-list-ul"></i></a>
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="form-group row">
+					<div class="col-md-4">
+						<label class="col-sm-2 col-form-label" for="code">Item</label>
+						<div class="col-sm-10">
+							<input readOnly type="text" class="form-control"
+								th:value="${item.code+' '+item.name}" id="code" />
+						</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-md-4">
+						<label class="col-sm-2 col-form-label" for="category">Category</label>
+						<div class="col-sm-10">
+							<input readOnly type="text" class="form-control"
+								th:value="${item.categories.name}" id="category" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+		</div>
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Price Lists</h3>
+				<div class="box-tools pull-right">
+					<a th:href="${'/items/pricelist/add/'+itemId}" type="button"
+						class="btn btn-warning"><i class="fa fa-plus"></i></a> <br
+						clear="all" />
+				</div>
+			</div>
+			<div class="box-body">
+
+				<div class="table-responsive box-body no-padding">
+					<table id="employeesTable"
+						class="table table-bordered table-hover stripe dataTable">
+						<thead>
+							<tr>
+								<th width="10%">Type</th>
+								<th width="10%">Qty From</th>
+								<th width="10%">Qty To</th>
+								<th width="10%">Price</th>
+								<th>Created By</th>
+								<th>Created At</th>
+								<th width="10%" class="text-center">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="row : ${list}">
+								<td th:text="${row.type}"></td>
+								<td th:text="${row.qtyFrom}"></td>
+								<td th:text="${row.qtyTo}"></td>
+								<td class="text-right"
+									th:text="${#numbers.formatDecimal(row.price, 0, 'COMMA', 2, 'POINT')}"></td>
+								<td th:text="${row.createdBy}"></td>
+								<td
+									th:text="${#temporals.format(row.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+
+								<td><div class="text-center"> <a class="btn btn-success btn-sm edit"
+									th:href="${'/items/pricelist/edit/' + row.id}"><i
+										class="fa fa-edit" aria-hidden="true"></i></a> - <a
+									class="btn btn-danger btn-sm delete"
+									th:href="${'/items/pricelist/delete/' + row.id}"><i
+										class="fa fa-trash" aria-hidden="true"></i> </a>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

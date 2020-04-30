@@ -1,0 +1,152 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>Payments</title>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var table = $('#employeesTable').DataTable();
+	});
+</script>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>Payments</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">Payments Reports</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Report</h3>
+			</div>
+			<div class="box-body">
+				<form data-toggle="validator" role="form" th:object="${paymentForm}"
+					th:action="@{/reports/sales.rpt}" method="post">
+					<div class="col-sm-6">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label" for="customerName">
+								Date From</label>
+							<div class="col-sm-3">
+								<select th:field="*{dateFrom.date}" class="form-control mr-1"
+									style="width: 100%">
+									<option th:each="n : ${datemodel.dt}" th:value="${n}"
+										th:text="${n}"></option>
+								</select>
+							</div>
+							<div class="col-sm-3">
+								<select th:field="*{dateFrom.month}" class="form-control mr-1"
+									style="width: 100%">
+									<option th:each="n : ${datemodel.month}" th:value="${n.value}"
+										th:text="${n.name}"></option>
+								</select>
+							</div>
+							<div class="col-sm-3">
+								<select th:field="*{dateFrom.year}" class="form-control mr-1"
+									style="width: 100%">
+									<option th:each="n : ${datemodel.year}" th:value="${n}"
+										th:text="${n}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label" for="customerName">
+								Date To</label>
+							<div class="col-sm-3">
+								<select th:field="*{dateTo.date}" class="form-control mr-1"
+									style="width: 100%">
+									<option th:each="n : ${datemodel.dt}" th:value="${n}"
+										th:text="${n}"></option>
+								</select>
+							</div>
+							<div class="col-sm-3">
+								<select th:field="*{dateTo.month}" class="form-control mr-1"
+									style="width: 100%">
+									<option th:each="n : ${datemodel.month}" th:value="${n.value}"
+										th:text="${n.name}"></option>
+								</select>
+							</div>
+							<div class="col-sm-3">
+								<select th:field="*{dateTo.year}" class="form-control mr-1"
+									style="width: 100%">
+									<option th:each="n : ${datemodel.year}" th:value="${n}"
+										th:text="${n}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="box-footer">
+							<button type="submit" class="btn btn-success">Search</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<div class="box-body">
+				<div class="table-responsive box-body no-padding">
+					<table id="employeesTable"
+						class="table table-bordered table-striped table-hover">
+						<thead>
+							<tr>
+								<th>User</th>
+								<th class="text-right" width="15%">Sub Total</th>
+								<th class="text-right" width="15%">Discount</th>
+								<th class="text-right" width="15%">Total Charged</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="row : ${sales}">
+								<td th:text="${row.createdBy}"></td>
+								<td class="text-right"
+									th:text="${#numbers.formatDecimal(row.subTotal, 0, 'COMMA', 2, 'POINT')}"></td>
+								<td class="text-right"
+									th:text="${#numbers.formatDecimal(row.discount, 0, 'COMMA', 2, 'POINT')}"></td>
+								<td class="text-right"
+									th:text="${#numbers.formatDecimal(row.paymentNet, 0, 'COMMA', 2, 'POINT')}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-6"></div>
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-6 col-form-label text-right" for="grandSubTotal">Grand Total
+								SubTotal</label>
+							<div class="col-sm-6">
+								<span class="form-control text-right"
+									th:text="${#numbers.formatDecimal(grandSubTotal, 0, 'COMMA', 2, 'POINT')}"
+									id="grandSubTotal"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-6 col-form-label text-right" for="grandDiscount">Grand
+								Total Discount</label>
+							<div class="col-sm-6">
+								<span class="form-control text-right"
+									th:text="${#numbers.formatDecimal(grandDiscount, 0, 'COMMA', 2, 'POINT')}"
+									id="grandDiscount"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-6 col-form-label text-right" for="grandCharged">Grand
+								Total Charged</label>
+							<div class="col-sm-6">
+								<span class="form-control text-right"
+									th:text="${#numbers.formatDecimal(grandCharged, 0, 'COMMA', 2, 'POINT')}"
+									id="grandCharged"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>

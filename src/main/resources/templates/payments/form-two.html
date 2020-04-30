@@ -1,0 +1,224 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>[[${title}]]</title>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>[[${title}]]</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li><a href="/salesorders">[[${title}]]</a></li>
+			<li class="active">Sales Invoice Form</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Payment Form</h3>
+				<div class="box-tools pull-right">
+					<a href="/salesorders" type="button" class="btn btn-warning"><i
+						class="fa fa-list-ul"></i></a>
+				</div>
+			</div>
+			<form data-toggle="validator" role="form" class="was-validated"
+				th:action="@{/payments/save/}+${orderId}" th:object="${paymentPayload}"
+				method="post">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-4">
+							<input type="hidden" th:field="*{id}" />
+							<input type="hidden" th:field="*{orderNumber}" />
+							<div class="form-group">
+								<label for="paymentNumber">Number</label> <input type="text"
+									readonly="readonly" required class="form-control"
+									th:field="*{paymentNumber}" id="paymentNumber" />
+								<div class="invalid-feedback"
+									th:if="${#fields.hasErrors('paymentNumber')}"
+									th:errors="*{paymentNumber}"></div>
+							</div>
+							<div class="form-group">
+								<label for="orderNumber">Type</label> <select
+									class="form-control mr-1" style="width: 100%"
+									th:field="*{paymentMethod}">
+									<option value="1">CASH</option>
+									<option value="2">BANK</option>
+									<option value="3">OTHERS</option>
+								</select>
+								<div class="invalid-feedback"
+									th:if="${#fields.hasErrors('paymentMethod')}"
+									th:errors="*{paymentMethod}"></div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="totalCharged">Total Charged</label> <span
+									class="form-control"
+									th:text="${#numbers.formatDecimal(paymentPayload.invoice.order.paymentNet, 0, 'COMMA', 2, 'POINT')}"
+									id="totalCharged"></span> <input type="hidden"
+									th:field="*{invoice.order.paymentNet}" />
+
+							</div>
+							<div class="form-group">
+								<label for="totalPaid">Total Paid</label> <span
+									class="form-control"
+									th:text="${#numbers.formatDecimal(paymentPayload.invoice.order.totalPaid, 0, 'COMMA', 2, 'POINT')}"
+									id="totalPaid"></span> <input type="hidden"
+									th:field="*{invoice.order.totalPaid}" />
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="totalDue">Total Due</label> <span
+									class="form-control"
+									th:text="${#numbers.formatDecimal(paymentPayload.invoice.order.totalOutstanding, 0, 'COMMA', 2, 'POINT')}"
+									id="totalDue"></span> <input type="hidden"
+									th:field="*{invoice.order.totalOutstanding}" />
+							</div>
+							<div class="form-group">
+								<label for="paymentAmount">Amount</label> <input type="number"
+									required class="form-control text-right"
+									th:field="*{paymentAmount}" min="0" step="500" id="paymentAmount" />
+								<div class="invalid-feedback"
+									th:if="${#fields.hasErrors('paymentAmount')}"
+									th:errors="*{paymentAmount}"></div>
+							</div>
+						</div>
+					</div>
+					<div class="box-footer">
+						<button type="submit" class="btn btn-primary pull-right">Save</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Invoice Form</h3>
+			</div>
+			<form role="form" th:object="${paymentPayload.invoice}">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<input type="hidden" th:field="*{id}" /> <input type="hidden"
+								th:field="*{status}" />
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="orderNumber">No</label>
+								<div class="col-sm-9">
+									<input type="text" required readonly="readonly"
+										class="form-control" th:field="*{orderNumber}"
+										id="orderNumber" />
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="customerName">Customer</label>
+								<div class="col-sm-9">
+									<select required disabled="disabled"
+										th:field="*{order.customerId}" class="form-control mr-1"
+										style="width: 100%">
+										<option value="">Customer</option>
+										<option th:each="n : ${customers}" th:value="${n.id}"
+											th:text="${n.firstName+' '+n.lastName}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="customerName">Completed
+									Date</label>
+								<div class="col-sm-3">
+									<select disabled="disabled" required class="form-control mr-1"
+										style="width: 100%" th:field="*{order.completedDate}">
+										<option value="">Tanggal</option>
+										<option th:each="n : ${datemodel.dt}" th:value="${n}"
+											th:text="${n}"></option>
+									</select>
+								</div>
+								<div class="col-sm-3">
+									<select disabled="disabled" required class="form-control mr-1"
+										style="width: 100%" th:field="*{order.completedMonth}">
+										<option value="">Bulan</option>
+										<option th:each="n : ${datemodel.month}" th:value="${n.value}"
+											th:text="${n.name}"></option>
+									</select>
+								</div>
+								<div class="col-sm-3">
+									<select disabled="disabled" required class="form-control mr-1"
+										style="width: 100%" th:field="*{order.completedYear}">
+										<option value="">Tahun</option>
+										<option th:each="n : ${datemodel.year}" th:value="${n}"
+											th:text="${n}"></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="subTotal">Sub
+									Total</label>
+								<div class="col-sm-8">
+									<span
+										th:text="${#numbers.formatDecimal(paymentPayload.invoice.order.subTotal, 0, 'COMMA', 2, 'POINT')}"
+										id="subTotal"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="discount">Discount
+									(Rp)</label>
+								<div class="col-sm-6">
+									<input type="number" required readonly="readonly"
+										class="form-control" th:field="*{order.discount}"
+										id="discount" />
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="paymentNet">Total
+									Charged</label>
+								<div class="col-sm-8">
+																		<span
+										th:text="${#numbers.formatDecimal(paymentPayload.invoice.order.paymentNet, 0, 'COMMA', 2, 'POINT')}"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+
+			<div class="box-body">
+				<div class="table-responsive box-body no-padding">
+					<table id="detailsTable"
+						class="table table-bordered table-hover dataTable">
+						<thead>
+							<tr>
+								<th>Item</th>
+								<th width="10%" class="text-right">Qty</th>
+								<th width="10%" class="text-right">Disc</th>
+								<th width="10%" class="text-right">Price</th>
+								<th width="10%" class="text-right">Length</th>
+								<th width="10%" class="text-right">Width</th>
+								<th width="10%" class="text-right">Type</th>
+								<th width="10%" class="text-right">Sub Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="row : ${details}">
+								<td th:text="${row.items.code+' '+row.items.name}"></td>
+								<td class="text-right" th:text="${row.qty}"></td>
+								<td class="text-right" th:text="${row.lineDisc}"></td>
+								<td class="text-right"
+									th:text="${#numbers.formatDecimal(row.price, 0, 'COMMA', 2, 'POINT')}"></td>
+								<td class="text-right" th:text="${row.length}"></td>
+								<td class="text-right" th:text="${row.width}"></td>
+								<td class="text-right" th:text="${row.type}"></td>
+								<td class="text-right"
+									th:text="${#numbers.formatDecimal(row.lineTotal, 0, 'COMMA', 2, 'POINT')}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="${T(com.morissoft.printing.constant.Paths).LAYOUT_MODE}">
+<head>
+<title>[[${title}]]</title>
+<script type="text/javascript" th:src="@{/dist/js/jquery-3.2.0.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/dist/js/jquery.autocomplete.js}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#autocomplete-input').devbridgeAutocomplete({
+			serviceUrl : '/items/pricelist/price/',
+			paramName : 'searchstr',
+			minChars : 1,
+			autoSelectFirst : true,
+		});
+	});
+</script>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>[[${title}]]</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li><a href="/salesorders"> Sales Orders</a></li>
+			<li><a th:href="${'/salesorders/edit/'+orderId}">Sales Order
+					Form</a></li>
+			<li class="active">Sales Order Details Form</li>
+		</ol>
+
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Details</h3>
+				<div class="box-tools pull-right">
+					<a th:href="${'/salesorders/edit/'+orderId}" type="button"
+						class="btn btn-warning"><i class="fa fa-list-ul"></i></a>
+				</div>
+			</div>
+			<form data-toggle="validator" role="form" class="was-validated"
+				th:object="${salesOrderDetailsPayload}"
+				th:action="@{/salesorders/details/save/}+${orderId}" method="post">
+				<div class="box-body">
+					<div class="col-md-4">
+						<input type="hidden" th:field="*{id}" /> <input type="hidden"
+							th:field="*{orderId}" />
+						<div class="form-group">
+							<label for="itemId">Item</label> <select required
+								class="form-control"
+								th:field="*{items.id}">
+								<option value="">Items</option>
+								<option th:each="n : ${items}" th:value="${n.id}"
+									th:text="${n.code+' '+n.name}" id="itemId"></option>
+							</select>
+							<div class="text-danger" th:if="${#fields.hasErrors('items.id')}"
+								th:errors="*{items.id}"></div>
+						</div>
+						<div class="form-group">
+							<label for="qty">Qty</label>
+							<div class="input-group">
+								<input type="number" required min="1"
+									class="form-control text-right" th:field="*{qty}" id="qty" />
+								<div class="text-danger" th:if="${#fields.hasErrors('qty')}"
+									th:errors="*{qty}"></div>
+
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="length">Length</label> <input type="number"
+								class="form-control" th:field="*{length}" id="length" step="any" />
+							<div class="text-danger" th:if="${#fields.hasErrors('length')}"
+								th:errors="*{length}"></div>
+						</div>
+						<div class="form-group">
+							<label for="width">Width</label> <input type="number"
+								class="form-control" th:field="*{width}" id="width" step="any" />
+							<div class="text-danger" th:if="${#fields.hasErrors('width')}"
+								th:errors="*{width}"></div>
+						</div>
+						<div class="form-group">
+							<label for="lineDisc">Discount</label>
+							<div class="input-group">
+								<input
+									onkeypress="this.value = this.value.replace(/[^0-9]/, '')"
+									onkeyup="this.value = this.value.replace(/[^0-9]/, '')"
+									autocomplete="off" type="text" required="true"
+									class="form-control text-right" th:field="*{lineDisc}"
+									id="lineDisc" />
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="box-footer">
+					<button type="submit" class="btn btn-primary">Save</button>
+				</div>
+			</form>
+			<!-- 			<div class="form-group">
+				<label for="autocomplete-input">Products</label><input type="text"
+					id="autocomplete-input" class="autocomplete">
+			</div> -->
+		</div>
+	</div>
+</body>
+</html>

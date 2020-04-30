@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<section th:include="fragments/config :: configFragment"></section>
+<head>
+<title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">Yohana Printing</title>
+</head>
+<body>
+	<header th:replace="fragments/header-second :: headerFragment"></header>
+	<div class="container headContainer">
+		<div class="public-header">
+			<section class="content-header" layout:fragment="header"></section>
+		</div>
+	</div>
+	<section th:replace="fragments/alert-section :: alert-section"></section>
+	<div layout:fragment="content" class="container bgContent"></div>
+	<footer th:replace="fragments/footer :: footerFragment" class="bg-dark"></footer>
+</body>
+</html>

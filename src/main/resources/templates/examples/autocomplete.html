@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title th:text="${title}"></title>
+
+<!-- JQuery -->
+<!--  <script type="text/javascript" th:src="@{/dist/js/jquery-3.2.0.min.js}"></script> -->
+<!--Import https://www.devbridge.com/sourcery/components/jquery-autocomplete/#-->
+<!-- <script type="text/javascript" th:src="@{/dist/js/jquery.autocomplete.js}"></script>-->
+ <!-- Compiled and minified JavaScript -->
+ <script type="text/javascript" th:src="@{/dist/js/materialize.min.js}"></script>
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet"
+	th:href="@{/dist/css/materialize.min.css}" media="screen,projection" /> 
+<!--Import Google Icon Font-->
+<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<script>
+	$(document).ready(function() {
+
+		$('#autocomplete-input').devbridgeAutocomplete({
+			serviceUrl : '/autocomplete/suggestion',
+			paramName : 'searchstr',
+			minChars : 1,
+			autoSelectFirst : true,
+		});
+
+	});
+</script>
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>AutoComplete</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">AutoComplete</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Form</h3>
+				<div class="box-tools pull-right">
+					<a href="/customers" type="button" class="btn btn-box-tool"><i
+						class="fa fa-list-ul"></i></a>
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col s12">
+					<div class="row">
+						<div class="input-field col s12">
+							<i class="material-icons prefix">textsms</i> <input type="text"
+								id="autocomplete-input" class="autocomplete"> <label
+								for="autocomplete-input">Countries of the World</label>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</body>
+</html>
